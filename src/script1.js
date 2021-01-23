@@ -2,6 +2,7 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
+import { Mesh, MeshBasicMaterial } from "three";
 
 /**
  * Base
@@ -15,13 +16,72 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 /**
- * Cube object
+ * House
  */
-const box = new THREE.Mesh(
-  new THREE.BoxBufferGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: "#a9c388" })
+// Floor
+const floor = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(20, 20),
+  new THREE.MeshStandardMaterial({ color: "#a9c388" })
 );
-scene.add(box);
+floor.rotation.x = -Math.PI * 0.5;
+floor.position.y = 0;
+scene.add(floor);
+
+// House group
+const house = new THREE.Group();
+scene.add(house);
+
+// walls
+const wallsHouse = new THREE.Mesh(
+  new THREE.BoxBufferGeometry(4, 2.5, 4),
+  new THREE.MeshStandardMaterial({ color: "#ac8e82" })
+);
+wallsHouse.position.y = 1.25;
+house.add(wallsHouse);
+
+// roof
+const roofHouse = new THREE.Mesh(
+  new THREE.ConeBufferGeometry(3.5, 1, 4),
+  new THREE.MeshStandardMaterial({ color: "#b35f45" })
+);
+roofHouse.rotation.y = Math.PI * 0.25;
+roofHouse.position.y = 2.5 + 0.5;
+house.add(roofHouse);
+
+// door
+const doorHouse = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(2, 2),
+  new THREE.MeshStandardMaterial({ color: "#b35f45" })
+);
+doorHouse.position.y = 1;
+doorHouse.position.z = 2 + 0.01;
+house.add(doorHouse);
+
+// bushes
+const bushGeometry = new THREE.SphereBufferGeometry(1, 16, 16);
+const bushMaterial = new THREE.MeshStandardMaterial({ color: "#89c854" });
+
+const bush1 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush1.scale.set(0.5, 0.5, 0.5);
+bush1.position.set(1.2, 0.2, 2.2);
+
+const bush2 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush2.scale.set(0.25, 0.25, 0.25);
+bush2.position.set(1.2 + 0.5, 0.1, 2.1);
+
+const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush3.scale.set(0.4, 0.4, 0.4);
+bush3.position.set(-1.2, 0.2, 2.2);
+
+const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush4.scale.set(0.25, 0.25, 0.25);
+bush4.position.set(-1.2, 0.05, 2.6);
+
+house.add(bush1, bush2, bush3, bush4);
+
+// low walls
+// alley
+// graves
 
 /**
  * Lights
