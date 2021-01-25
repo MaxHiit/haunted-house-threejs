@@ -35,6 +35,12 @@ const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
 const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
 const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
 
+// house walls and outside walls texture
+const wallHouseColorTexture = textureLoader.load("/textures/bricks/color.jpg");
+const wallHouseAoTexture = textureLoader.load("/textures/bricks/ambientOcclusion.jpg");
+const wallHouseNormalTexture = textureLoader.load("/textures/bricks/normal.jpg");
+const wallHouseRoughnessTexture = textureLoader.load("/textures/bricks/roughness.jpg");
+
 /**
  * House
  */
@@ -54,7 +60,17 @@ scene.add(house);
 // walls
 const wallsHouse = new THREE.Mesh(
   new THREE.BoxBufferGeometry(4, 2.5, 4),
-  new THREE.MeshStandardMaterial({ color: "#ac8e82" })
+  new THREE.MeshStandardMaterial({
+    map: wallHouseColorTexture,
+    aoMap: wallHouseAoTexture,
+    normalMap: wallHouseNormalTexture,
+    roughness: wallHouseRoughnessTexture
+  })
+);
+
+wallsHouse.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(wallsHouse.geometry.attributes.uv.array, 2)
 );
 wallsHouse.position.y = 1.25;
 house.add(wallsHouse);
@@ -86,7 +102,7 @@ const doorHouse = new THREE.Mesh(
 
 doorHouse.geometry.setAttribute(
   "uv2",
-  new THREE.Float16BufferAttribute(doorHouse.geometry.attributes.uv.array, 2)
+  new THREE.Float32BufferAttribute(doorHouse.geometry.attributes.uv.array, 2)
 );
 doorHouse.position.y = 1;
 doorHouse.position.z = 2 + 0.01;
@@ -117,9 +133,14 @@ house.add(bush1, bush2, bush3, bush4);
 // low walls
 const lowWalls = new THREE.Group();
 
-// back walls
-const lowWallsGeometry = new THREE.BoxBufferGeometry(3, 1, 0.3);
-const lowWallMaterial = new THREE.MeshStandardMaterial({ color: "#ececec" });
+// outside walls
+const lowWallsGeometry = new THREE.BoxBufferGeometry(3, 1, 0.3, 4);
+const lowWallMaterial = new THREE.MeshStandardMaterial({
+  map: wallHouseColorTexture,
+  aoMap: wallHouseAoTexture,
+  normalMap: wallHouseNormalTexture,
+  roughness: wallHouseRoughnessTexture
+});
 
 const backLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 backLeftWall.position.set(-3.5, 0.5, -1.85);
