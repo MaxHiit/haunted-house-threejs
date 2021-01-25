@@ -161,9 +161,19 @@ for (let i = 0; i < 50; i++) {
  * Lights
  */
 // Ambient light
-const ambientLight = new THREE.AmbientLight("#ffffff", 0.5);
+const ambientLight = new THREE.AmbientLight("#b9d5ff", 0.12);
 gui.add(ambientLight, "intensity").min(0).max(1).step(0.001);
 scene.add(ambientLight);
+
+// directional light
+const mooLight = new THREE.DirectionalLight("#b9d5ff", 0.12);
+gui.add(mooLight, "intensity").min(0).max(1).step(0.001);
+scene.add(mooLight);
+
+// door light
+const doorLight = new THREE.PointLight("#ff7d46", 1, 7);
+doorLight.position.set(0, 2.2, 2.7);
+house.add(doorLight);
 
 /**
  *  Sizes
