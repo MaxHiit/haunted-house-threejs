@@ -128,6 +128,15 @@ const gate = new THREE.Mesh(
 gate.position.set(0, 0.75, 4);
 house.add(gate);
 
+// alley
+const alley = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(2, 3.5),
+  new THREE.MeshStandardMaterial({ color: "#000000", wireframe: true })
+);
+alley.position.set(0, 0.01, 3.5);
+alley.rotation.x = Math.PI * 0.5;
+house.add(alley);
+
 /**
  * Lights
  */
