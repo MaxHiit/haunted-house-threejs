@@ -137,6 +137,26 @@ alley.position.set(0, 0.01, 3.5);
 alley.rotation.x = Math.PI * 0.5;
 house.add(alley);
 
+// graves
+const graves = new THREE.Group();
+scene.add(graves);
+
+const graveGeometry = new THREE.BoxBufferGeometry(0.6, 0.8, 0.2);
+const graveMaterial = new THREE.MeshStandardMaterial({ color: "#b2b6b1" });
+
+for (let i = 0; i < 50; i++) {
+  const angle = Math.random() * Math.PI * 2;
+  const radius = 3 + Math.random() * 6.2;
+  const x = Math.sin(angle) * radius;
+  const z = Math.cos(angle) * radius;
+
+  const graveMesh = new THREE.Mesh(graveGeometry, graveMaterial);
+  graveMesh.position.set(x, 0.3, z);
+  graveMesh.rotation.y = (Math.random() - 0.5) * 4;
+  graveMesh.rotation.z = (Math.random() - 0.5) * 4;
+  graves.add(graveMesh);
+}
+
 /**
  * Lights
  */
