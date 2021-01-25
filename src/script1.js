@@ -93,15 +93,15 @@ const backRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 backRightWall.position.set(3.5, 0.5, -1.85);
 
 // middle walls
-const middleLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
-middleLeftWall.position.set(-5, 0.5, 1.75);
-middleLeftWall.rotation.y = Math.PI * 0.5;
-middleLeftWall.scale.x = 2.5;
+const sideLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+sideLeftWall.position.set(-5, 0.5, 1.75);
+sideLeftWall.rotation.y = Math.PI * 0.5;
+sideLeftWall.scale.x = 2.5;
 
-const middleRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
-middleRightWall.position.set(5, 0.5, 1.75);
-middleRightWall.rotation.y = Math.PI * 0.5;
-middleRightWall.scale.x = 2.5;
+const sideRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+sideRightWall.position.set(5, 0.5, 1.75);
+sideRightWall.rotation.y = Math.PI * 0.5;
+sideRightWall.scale.x = 2.5;
 
 // front walls
 const frontLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
@@ -113,14 +113,20 @@ frontRightWall.position.set(3.5, 0.5, 4);
 lowWalls.add(
   backLeftWall,
   backRightWall,
-  middleRightWall,
-  middleLeftWall,
+  sideRightWall,
+  sideLeftWall,
   frontLeftWall,
   frontRightWall
 );
 scene.add(lowWalls);
-// alley
-// graves
+
+// gate
+const gate = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(4, 1.5),
+  new THREE.MeshStandardMaterial({ color: "#ececec" })
+);
+gate.position.set(0, 0.75, 4);
+house.add(gate);
 
 /**
  * Lights
