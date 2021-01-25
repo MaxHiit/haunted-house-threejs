@@ -80,6 +80,45 @@ bush4.position.set(-1.2, 0.05, 2.6);
 house.add(bush1, bush2, bush3, bush4);
 
 // low walls
+const lowWalls = new THREE.Group();
+
+// back walls
+const lowWallsGeometry = new THREE.BoxBufferGeometry(3, 1, 0.3);
+const lowWallMaterial = new THREE.MeshStandardMaterial({ color: "#ececec" });
+
+const backLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+backLeftWall.position.set(-3.5, 0.5, -1.85);
+
+const backRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+backRightWall.position.set(3.5, 0.5, -1.85);
+
+// middle walls
+const middleLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+middleLeftWall.position.set(-5, 0.5, 1.75);
+middleLeftWall.rotation.y = Math.PI * 0.5;
+middleLeftWall.scale.x = 2.5;
+
+const middleRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+middleRightWall.position.set(5, 0.5, 1.75);
+middleRightWall.rotation.y = Math.PI * 0.5;
+middleRightWall.scale.x = 2.5;
+
+// front walls
+const frontLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+frontLeftWall.position.set(-3.5, 0.5, 4);
+
+const frontRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
+frontRightWall.position.set(3.5, 0.5, 4);
+
+lowWalls.add(
+  backLeftWall,
+  backRightWall,
+  middleRightWall,
+  middleLeftWall,
+  frontLeftWall,
+  frontRightWall
+);
+scene.add(lowWalls);
 // alley
 // graves
 
