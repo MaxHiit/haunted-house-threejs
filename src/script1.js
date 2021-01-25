@@ -41,14 +41,45 @@ const wallHouseAoTexture = textureLoader.load("/textures/bricks/ambientOcclusion
 const wallHouseNormalTexture = textureLoader.load("/textures/bricks/normal.jpg");
 const wallHouseRoughnessTexture = textureLoader.load("/textures/bricks/roughness.jpg");
 
+// grass texture for the floor
+const grassColorTexture = textureLoader.load("/textures/grass/color.jpg");
+const grassAoTexture = textureLoader.load("/textures/grass/ambientOcclusion.jpg");
+const grassNormalTexture = textureLoader.load("/textures/grass/normal.jpg");
+const grassRoughnessTexture = textureLoader.load("/textures/grass/roughness.jpg");
+
+grassColorTexture.repeat.set(8, 8);
+grassAoTexture.repeat.set(8, 8);
+grassNormalTexture.repeat.set(8, 8);
+grassRoughnessTexture.repeat.set(8, 8);
+
+grassColorTexture.wrapS = THREE.RepeatWrapping;
+grassAoTexture.wrapS = THREE.RepeatWrapping;
+grassNormalTexture.wrapS = THREE.RepeatWrapping;
+grassRoughnessTexture.wrapS = THREE.RepeatWrapping;
+grassColorTexture.wrapT = THREE.RepeatWrapping;
+grassAoTexture.wrapT = THREE.RepeatWrapping;
+grassNormalTexture.wrapT = THREE.RepeatWrapping;
+grassRoughnessTexture.wrapT = THREE.RepeatWrapping;
+
 /**
  * House
  */
 // Floor
 const floor = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(20, 20),
-  new THREE.MeshStandardMaterial({ color: "#a9c388" })
+  new THREE.MeshStandardMaterial({
+    map: grassColorTexture,
+    aoMap: grassAoTexture,
+    normalMap: grassNormalTexture,
+    roughnessMap: grassRoughnessTexture
+  })
 );
+
+floor.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(floor.geometry.attributes.uv.array, 2)
+);
+
 floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = 0;
 scene.add(floor);
@@ -64,7 +95,7 @@ const wallsHouse = new THREE.Mesh(
     map: wallHouseColorTexture,
     aoMap: wallHouseAoTexture,
     normalMap: wallHouseNormalTexture,
-    roughness: wallHouseRoughnessTexture
+    roughnessMap: wallHouseRoughnessTexture
   })
 );
 
@@ -96,7 +127,7 @@ const doorHouse = new THREE.Mesh(
     displacementScale: 0.1,
     normalMap: doorNormalTexture,
     metalnessMap: doorMetalnessTexture,
-    roughness: doorRoughnessTexture
+    roughnessMap: doorRoughnessTexture
   })
 );
 
@@ -139,32 +170,67 @@ const lowWallMaterial = new THREE.MeshStandardMaterial({
   map: wallHouseColorTexture,
   aoMap: wallHouseAoTexture,
   normalMap: wallHouseNormalTexture,
-  roughness: wallHouseRoughnessTexture
+  roughnessMap: wallHouseRoughnessTexture
 });
+
+wallsHouse.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(wallsHouse.geometry.attributes.uv.array, 2)
+);
 
 const backLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 backLeftWall.position.set(-3.5, 0.5, -1.85);
 
+backLeftWall.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(backLeftWall.geometry.attributes.uv.array, 2)
+);
+
 const backRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 backRightWall.position.set(3.5, 0.5, -1.85);
 
-// middle walls
+backRightWall.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(backRightWall.geometry.attributes.uv.array, 2)
+);
+
+// side walls
 const sideLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 sideLeftWall.position.set(-5, 0.5, 1.75);
 sideLeftWall.rotation.y = Math.PI * 0.5;
 sideLeftWall.scale.x = 2.5;
+
+sideLeftWall.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(sideLeftWall.geometry.attributes.uv.array, 2)
+);
 
 const sideRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 sideRightWall.position.set(5, 0.5, 1.75);
 sideRightWall.rotation.y = Math.PI * 0.5;
 sideRightWall.scale.x = 2.5;
 
+sideRightWall.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(sideRightWall.geometry.attributes.uv.array, 2)
+);
+
 // front walls
 const frontLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 frontLeftWall.position.set(-3.5, 0.5, 4);
 
+frontLeftWall.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(frontLeftWall.geometry.attributes.uv.array, 2)
+);
+
 const frontRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
 frontRightWall.position.set(3.5, 0.5, 4);
+
+frontRightWall.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(frontRightWall.geometry.attributes.uv.array, 2)
+);
 
 lowWalls.add(
   backLeftWall,
