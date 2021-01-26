@@ -2,7 +2,7 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
-import { Mesh, MeshBasicMaterial } from "three";
+import { Mesh, MeshBasicMaterial, Side } from "three";
 
 /**
  * Base
@@ -60,6 +60,43 @@ grassColorTexture.wrapT = THREE.RepeatWrapping;
 grassAoTexture.wrapT = THREE.RepeatWrapping;
 grassNormalTexture.wrapT = THREE.RepeatWrapping;
 grassRoughnessTexture.wrapT = THREE.RepeatWrapping;
+
+// gate texture
+const gateColorTexture = textureLoader.load("/textures/gate/color.jpg");
+const gateAoTexture = textureLoader.load("/textures/gate/ambientOcclusion.jpg");
+const gateHeightTexture = textureLoader.load("/textures/gate/height.jpg");
+const gateNormalTexture = textureLoader.load("/textures/gate/normal.jpg");
+const gateOpacityTexture = textureLoader.load("/textures/gate/opacity.jpg");
+const gateRoughnessTexture = textureLoader.load("/textures/gate/roughness.jpg");
+
+gateColorTexture.repeat.set(2, 1);
+gateAoTexture.repeat.set(2, 1);
+gateHeightTexture.repeat.set(2, 1);
+gateNormalTexture.repeat.set(2, 1);
+gateOpacityTexture.repeat.set(2, 1);
+gateRoughnessTexture.repeat.set(2, 1);
+
+gateColorTexture.wrapS = THREE.RepeatWrapping;
+gateAoTexture.wrapS = THREE.RepeatWrapping;
+gateHeightTexture.wrapS = THREE.RepeatWrapping;
+gateNormalTexture.wrapS = THREE.RepeatWrapping;
+gateOpacityTexture.wrapS = THREE.RepeatWrapping;
+gateRoughnessTexture.wrapS = THREE.RepeatWrapping;
+
+gateColorTexture.wrapT = THREE.RepeatWrapping;
+gateAoTexture.wrapT = THREE.RepeatWrapping;
+gateHeightTexture.wrapT = THREE.RepeatWrapping;
+gateNormalTexture.wrapT = THREE.RepeatWrapping;
+gateOpacityTexture.wrapT = THREE.RepeatWrapping;
+gateRoughnessTexture.wrapT = THREE.RepeatWrapping;
+
+// rotation of the texture in order to put the spikes of the door on top
+gateColorTexture.rotation = Math.PI * 1;
+gateAoTexture.rotation = Math.PI * 1;
+gateHeightTexture.rotation = Math.PI * 1;
+gateNormalTexture.rotation = Math.PI * 1;
+gateOpacityTexture.rotation = Math.PI * 1;
+gateRoughnessTexture.wrapT = Math.PI * 1;
 
 /**
  * House
@@ -245,8 +282,20 @@ scene.add(lowWalls);
 // gate
 const gate = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(4, 1.5),
-  new THREE.MeshStandardMaterial({ color: "#ececec" })
+  new THREE.MeshStandardMaterial({
+    map: gateColorTexture,
+    aoMap: gateAoTexture,
+    displacementMap: gateHeightTexture,
+    displacementScale: 0.3,
+    normalMap: gateNormalTexture,
+    opacity: gateOpacityTexture,
+    roughnessMap: gateRoughnessTexture
+  })
 );
+
+gate.material.side = THREE.DoubleSide;
+console.log(gate);
+
 gate.position.set(0, 0.75, 4);
 house.add(gate);
 
