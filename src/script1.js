@@ -96,7 +96,14 @@ gateAoTexture.rotation = Math.PI * 1;
 gateHeightTexture.rotation = Math.PI * 1;
 gateNormalTexture.rotation = Math.PI * 1;
 gateOpacityTexture.rotation = Math.PI * 1;
-gateRoughnessTexture.wrapT = Math.PI * 1;
+gateRoughnessTexture.rotation = Math.PI * 1;
+
+// bushes texture
+const bushColorTexture = textureLoader.load("/textures/brushes/color.jpg");
+const bushAoTexture = textureLoader.load("/textures/brushes/ambientOcclusion.jpg");
+const bushHeightTexture = textureLoader.load("/textures/brushes/height.jpg");
+const bushNormalTexture = textureLoader.load("/textures/brushes/normal.jpg");
+const bushroughnessTexture = textureLoader.load("/textures/brushes/roughness.jpg");
 
 /**
  * House
@@ -252,17 +259,28 @@ sideRightWall.geometry.setAttribute(
   new THREE.Float32BufferAttribute(sideRightWall.geometry.attributes.uv.array, 2)
 );
 
+// front bushes
+const wallBushGeometry = new THREE.BoxBufferGeometry(2.85, 1, 0.3, 4);
+const frontBushMaterial = new THREE.MeshStandardMaterial({
+  map: bushColorTexture,
+  aoMap: bushAoTexture,
+  displacementMap: bushHeightTexture,
+  displacementScale: 0.1,
+  normalMap: bushNormalTexture,
+  roughnessMap: bushroughnessTexture
+});
+
 // front walls
-const frontLeftWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
-frontLeftWall.position.set(-3.5, 0.5, 4);
+const frontLeftWall = new THREE.Mesh(wallBushGeometry, frontBushMaterial);
+frontLeftWall.position.set(-3.42, 0.5, 4);
 
 frontLeftWall.geometry.setAttribute(
   "uv2",
   new THREE.Float32BufferAttribute(frontLeftWall.geometry.attributes.uv.array, 2)
 );
 
-const frontRightWall = new THREE.Mesh(lowWallsGeometry, lowWallMaterial);
-frontRightWall.position.set(3.5, 0.5, 4);
+const frontRightWall = new THREE.Mesh(wallBushGeometry, frontBushMaterial);
+frontRightWall.position.set(3.42, 0.5, 4);
 
 frontRightWall.geometry.setAttribute(
   "uv2",
@@ -293,20 +311,16 @@ const gate = new THREE.Mesh(
   })
 );
 
+gate.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(gate.geometry.attributes.uv.array, 2)
+);
+
 gate.material.side = THREE.DoubleSide;
 console.log(gate);
 
 gate.position.set(0, 0.75, 4);
 house.add(gate);
-
-// alley
-const alley = new THREE.Mesh(
-  new THREE.PlaneBufferGeometry(2, 3.5),
-  new THREE.MeshStandardMaterial({ color: "#000000", wireframe: true })
-);
-alley.position.set(0, 0.01, 3.5);
-alley.rotation.x = Math.PI * 0.5;
-house.add(alley);
 
 // graves
 const graves = new THREE.Group();
@@ -324,7 +338,8 @@ for (let i = 0; i < 50; i++) {
   const graveMesh = new THREE.Mesh(graveGeometry, graveMaterial);
   graveMesh.position.set(x, 0.3, z);
   graveMesh.rotation.y = (Math.random() - 0.5) * 4;
-  graveMesh.rotation.z = (Math.random() - 0.5) * 4;
+  graveMesh.rotation.z = (Math.random() - 0.5) * 0.5;
+  graveMesh.castShadow = true;
   graves.add(graveMesh);
 }
 
@@ -345,6 +360,14 @@ scene.add(mooLight);
 const doorLight = new THREE.PointLight("#ff7d46", 1, 7);
 doorLight.position.set(0, 2.2, 2.7);
 house.add(doorLight);
+
+/**
+ * Ghosts
+ */
+const ghots1 = new THREE.PointLight("#ff00ff", 2, 3);
+const ghots2 = new THREE.PointLight("#00ffff", 2, 3);
+const ghots3 = new THREE.PointLight("#ffff00", 2, 3);
+scene.add(ghots1, ghots2, ghots3);
 
 /**
  *  Sizes
@@ -393,12 +416,64 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setClearColor("#262837");
 
 /**
+ * Shadows
+ */
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+mooLight.castShadow = true;
+doorLight.castShadow = true;
+ghots1.castShadow = true;
+ghots2.castShadow = true;
+ghots3.castShadow = true;
+
+wallsHouse.castShadow = true;
+bush1.castShadow = true;
+bush2.castShadow = true;
+bush3.castShadow = true;
+bush4.castShadow = true;
+
+floor.receiveShadow = true;
+
+doorLight.shadow.mapSize.width = 256;
+doorLight.shadow.mapSize.height = 256;
+doorLight.shadow.camera.far = 7;
+
+ghots1.shadow.mapSize.width = 256;
+ghots1.shadow.mapSize.height = 256;
+ghots1.shadow.camera.far = 7;
+
+ghots2.shadow.mapSize.width = 256;
+ghots2.shadow.mapSize.height = 256;
+ghots2.shadow.camera.far = 7;
+
+ghots3.shadow.mapSize.width = 256;
+ghots3.shadow.mapSize.height = 256;
+ghots3.shadow.camera.far = 7;
+
+/**
  * Animate
  */
 const clock = new THREE.Clock();
 
 const animate = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // Update ghosts
+  const ghost1Angle = elapsedTime * 0.5;
+  ghots1.position.x = Math.cos(ghost1Angle) * 4;
+  ghots1.position.z = Math.sin(ghost1Angle) * 4;
+  ghots1.position.y = Math.sin(elapsedTime * 4);
+
+  const ghost2Angle = -elapsedTime * 0.3;
+  ghots2.position.x = Math.cos(ghost2Angle) * 5;
+  ghots2.position.z = Math.sin(ghost2Angle) * 5;
+  ghots2.position.y = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
+
+  const ghost3Angle = elapsedTime * 0.18;
+  ghots3.position.x = Math.cos(ghost3Angle) * (7 + Math.sin(elapsedTime * 0.32));
+  ghots3.position.z = Math.sin(ghost3Angle) * (7 + Math.sin(elapsedTime * 0.5));
+  ghots3.position.y = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
+
   // update controls
   controls.update();
   // render
